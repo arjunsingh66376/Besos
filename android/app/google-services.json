@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "561842068248",
+    "project_id": "ecomm-bb308",
+    "storage_bucket": "ecomm-bb308.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561842068248:android:5c68120068bfbb9c275c6d",
+        "android_client_info": {
+          "package_name": "com.ecomm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561842068248-rvmq59sj8c3i6ihu3hh5ru067nc9erk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ecomm",
+            "certificate_hash": "8f0560819c9cd7fbe49da9281b2aa4e0580d38e1"
+          }
+        },
+        {
+          "client_id": "561842068248-qfmac2cag82m8ai3jii9m9306lqo9rne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApeAIXKxYdDP3WtM2PMy_cwS2JIJJOyHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561842068248-qfmac2cag82m8ai3jii9m9306lqo9rne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
