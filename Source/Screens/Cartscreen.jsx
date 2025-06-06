@@ -5,6 +5,7 @@ import CartItem from '../Component/CartItem';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import GradientButton from '../Component/Gradientbutton';
 import { useNavigation } from '@react-navigation/native';
+import RazorpayCheckout from 'react-native-razorpay';
 
 const CartScreen = () => {
   const { cartItems } = useCart();
@@ -13,6 +14,35 @@ const CartScreen = () => {
   const total = cartItems.reduce((sum, item) => {
     return sum + item.price * (item.quantity || 1);
   }, 0);
+
+  // handle payment  button 
+
+// Inside your Checkout button onPress
+const handlePayment = () => {
+  var options = {
+    description: 'Order Payment',
+    image: 'https://your-logo-url.com/logo.png',
+    currency: 'INR',
+    key: 'rzp_test_Q1l5veFa2pHJFF', // Use test key for testing
+    amount: total * 100, // Amount is in paise
+    name: 'Besos',
+    prefill: {
+      email: 'user@example.com',
+      contact: '9999999999',
+      name: 'Test User'
+    },
+    theme: { color: '#000' }
+  }
+  RazorpayCheckout.open(options).then((data) => {
+    // handle success
+    alert(`Success: ${data.razorpay_payment_id}`);
+    // Here you can navigate to order success screen
+  }).catch((error) => {
+    // handle failure
+    alert(`Error: ${error.code} | ${error.description}`);
+  });
+}
+
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -45,9 +75,7 @@ const CartScreen = () => {
         <View style={styles.fixedBar}>
           <GradientButton
             text={`Checkout - $${total}`}
-            onPress={() => {
-              console.log('Checkout pressed');
-            }}
+            onPress={handlePayment}
           />
         </View>
       )}

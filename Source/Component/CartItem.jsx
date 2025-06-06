@@ -54,8 +54,9 @@ const styles = StyleSheet.create({
   },
   remove: {
     color: '#ff0000',
-    fontSize: 14,
+    fontSize: 16,
     marginTop: 6,
+    fontWeight:'800'
   },
 });
 

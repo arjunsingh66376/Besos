@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TextInput, FlatList, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState  } from 'react'
 
 import Categories from '../Component/Categories'
 import Productcard from '../Component/Productcard'
@@ -9,8 +9,15 @@ import {  mouse } from '../data/Mouse'
 import { television } from '../data/Television'
 import { laptop } from '../data/Laptop'
 import Icon from 'react-native-vector-icons/Ionicons' // 🛒 Vector Icon import
+import LottieView from 'lottie-react-native';
+
+
 
 const HomeScreen = ({ navigation }) => {
+
+
+  const [gittoPressed, setGittoPressed] = useState(false);
+
   const [selectedCategory, setSelectedCategory] = useState('Smart Watch');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -50,7 +57,29 @@ const HomeScreen = ({ navigation }) => {
       <FlatList
         ListHeaderComponent={
           <>
-            <Text style={Styles.headline}>Find Your Suitable Tech Now.</Text>
+          {/*  this is headline part  */}
+          <View style={Styles.headlineContainer}>
+  <Text style={Styles.headline}>Find Your Suitable Tech Now.</Text>
+
+  <Pressable
+  style={Styles.gitbotBox}
+  onPressIn={() => setGittoPressed(true)}
+  onPressOut={() => setGittoPressed(false)}
+  onPress={() => navigation.navigate('Chatbot')}
+>
+  <LottieView
+    source={require('../../Source/assets/Lottie/gitto.json')}
+    autoPlay
+    loop
+    resizeMode='contain'
+    speed={1}
+    style={Styles.gitbotLottie}
+  />
+  <Text style={[Styles.gitbotText, gittoPressed && { color: 'black' ,backgroundColor:"pink" }]}> wanna ask from gitto ?</Text>
+</Pressable>
+
+</View>
+
             <View style={Styles.maininputcont}>
               <View style={Styles.inputwrapper}>
                 <Image style={Styles.searchincon} source={require('../../Source/assets/icons/icons8-search-50.png')} />
@@ -92,15 +121,43 @@ const Styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
   },
+
+  headlineContainer: {
+    marginBottom: 10,
+  },
+  
   headline: {
     color: "black",
     fontSize: 36,
-    fontFamily: 'Raleway-Bold'
+    fontFamily: 'Raleway-Bold',
+    marginBottom: 10,
   },
+  
+  gitbotBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // Optional: center it or align left as you like
+    // justifyContent: 'flex-start',
+  },
+  
+  gitbotLottie: {
+    width: 60,
+    height: 60,
+  },
+  
+  gitbotText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginLeft: 8,
+  },
+  
+  
+ 
   maininputcont: {
     flexDirection: 'row',
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginBottom: 30,
   },
   inputwrapper: {
@@ -108,7 +165,7 @@ const Styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 200,
     height: 50,
-    marginTop: 20,
+
     flexDirection: 'row',
     flex: 12,
     marginRight: 5
@@ -130,7 +187,7 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 60,
-    marginTop: 15
+    
   },
   noResultText: {
     textAlign: 'center',

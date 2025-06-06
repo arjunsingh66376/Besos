@@ -26,17 +26,21 @@ const AuthScreen = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      setLoading(true);
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  
       const userInfo = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
-      await auth().signInWithCredential(googleCredential);
-      Alert.alert('Success', 'Google Sign-In successful!');
+      console.log('Google Sign-In Success:', userInfo);
+  
+      const { idToken } = userInfo;
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      const user = await auth().signInWithCredential(googleCredential);
+      console.log('Firebase Auth Success:', user);
+  
     } catch (error) {
-      Alert.alert('Google Sign-In Error', error.message);
+      console.error('Google Sign-In Error:', error);
     }
-    setLoading(false);
   };
+  
 
   const handleEmailPassword = async () => {
     if (!email.includes('@')) {
