@@ -34,6 +34,41 @@ const toastConfig = {
     />
   ),
   // You can also customize 'error', 'info' here similarly
+  error: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: '#000', backgroundColor: '#000' }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+      }}
+      text2Style={{
+        fontSize: 14,
+        color: '#ccc',
+      }}
+      renderLeadingIcon={() => null}
+    />
+  ),
+  info: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: '#000', backgroundColor: '#000' }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+      }}
+      text2Style={{
+        fontSize: 14,
+        color: '#ccc',
+      }}
+      renderLeadingIcon={() => null}
+    />
+  ),
+
 };
 
 const App = () => {
@@ -42,7 +77,7 @@ const App = () => {
     <CartProvider>
 
     <NavigationContainer >
-      <Stack.Navigator initialRouteName="Home" screenOptions={{
+      <Stack.Navigator initialRouteName="Auth" screenOptions={{
         headerShown:false
       }}>
         <Stack.Screen name="Auth" component={AuthScreen} />

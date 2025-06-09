@@ -6,16 +6,18 @@ import {
   StyleSheet,
   TextInput,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 
 const AuthScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -24,31 +26,22 @@ const AuthScreen = () => {
     });
   }, []);
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  
-      const userInfo = await GoogleSignin.signIn();
-      console.log('Google Sign-In Success:', userInfo);
-  
-      const { idToken } = userInfo;
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const user = await auth().signInWithCredential(googleCredential);
-      console.log('Firebase Auth Success:', user);
-  
-    } catch (error) {
-      console.error('Google Sign-In Error:', error);
-    }
-  };
-  
-
   const handleEmailPassword = async () => {
     if (!email.includes('@')) {
-      Alert.alert('Invalid Email', 'Please enter a valid email');
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Email',
+        position: 'bottom',
+      });
       return;
     }
+
     if (password.length < 6) {
-      Alert.alert('Weak Password', 'Password must be at least 6 characters');
+      Toast.show({
+        type: 'error',
+        text1: 'Password must be at least 6 characters',
+        position: 'bottom',
+      });
       return;
     }
 
@@ -56,21 +49,37 @@ const AuthScreen = () => {
     try {
       if (isSignup) {
         await auth().createUserWithEmailAndPassword(email, password);
-        Alert.alert('Success', 'Account created!');
+        Toast.show({
+          type: 'success',
+          text1: 'Account Created',
+          position: 'bottom',
+        });
       } else {
         await auth().signInWithEmailAndPassword(email, password);
-        Alert.alert('Success', 'Logged in!');
+        Toast.show({
+          type: 'success',
+          text1: 'Login Successful',
+          position: 'bottom',
+        });
+        navigation.replace('Home');
       }
       setEmail('');
       setPassword('');
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message,
+        position: 'bottom',
+      });
     }
     setLoading(false);
   };
 
   return (
+    
     <View style={styles.container}>
+      
       <Text style={styles.title}>{isSignup ? 'Sign Up' : 'Login'}</Text>
 
       <TextInput
@@ -104,10 +113,7 @@ const AuthScreen = () => {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => setIsSignup(!isSignup)}
-        disabled={loading}
-      >
+      <TouchableOpacity onPress={() => setIsSignup(!isSignup)} disabled={loading}>
         <Text style={styles.toggleText}>
           {isSignup
             ? 'Already have an account? Login'
@@ -121,12 +127,19 @@ const AuthScreen = () => {
         <View style={styles.dividerLine} />
       </View>
 
+      {/* Google Sign-In Disabled Placeholder */}
       <TouchableOpacity
-        style={styles.googleBtn}
-        onPress={handleGoogleSignIn}
-        disabled={loading}
+        style={[styles.googleBtn, { backgroundColor: '#555' }]}
+        onPress={() =>
+          Toast.show({
+            type: 'info',
+            text1: 'Google Sign-In Unavailable',
+            text2: 'Please use Email login for now.',
+            position: 'bottom',
+          })
+        }
       >
-        <Text style={styles.btnText}>Continue with Google</Text>
+        <Text style={[styles.btnText, { color: '#ccc' }]}>Google Sign-In Unavailable</Text>
       </TouchableOpacity>
     </View>
   );
