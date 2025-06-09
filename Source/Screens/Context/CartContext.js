@@ -11,25 +11,31 @@ export const CartProvider = ({ children }) => {
   const addToCart = (product) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === product.id);
+  
       if (existingItem) {
+        // If item already exists, increase quantity
         return prevItems.map((item) =>
-          item.id === product.id ? { ...item, quantity: (item.quantity || 0) + 1 } : item
-      );
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
       } else {
-        // Initialize quantity to 1 when a new item is added
+        // Else add new item
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
-
+  
+    // ✅ Toast and console.log should be inside the function block
     Toast.show({
       type: 'cartAddSuccess',
       text1: 'Item Added to Cart!',
       text2: `${product.name} has been added.`,
       visibilityTime: 2000,
     });
-
+  
     console.log('Item added to cart:', product.name);
   };
+  
 
   const removeFromCart = (productId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
