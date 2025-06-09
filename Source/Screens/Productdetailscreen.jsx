@@ -1,140 +1,118 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react'; // Removed useState, useContext for this simplified test
 import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  TouchableOpacity, // <<< Keep TouchableOpacity
   View,
-  Dimensions,
+  Dimensions, // <<< CRITICAL: Ensure this is imported
   Alert,
+  // Removed Platform as it's not strictly needed without GradientButton/shadows
 } from 'react-native';
 
-import { useRoute } from '@react-navigation/native';
-import Header from '../Component/Header';
-import Productcarousel from '../Component/Productcarousel';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { font } from '../../assets/fonts/font';
-import GradientButton from '../Component/Gradientbutton';
-import { useContext } from 'react';
-import { CartContext } from './Context/CartContext'; // adjust path as needed
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { useCart } from '../Screens/Context/CartContext'; // <-- Add this import
 
-const COLORS = [
-  { label: 'Silver', color: '#C0C0C0' },
-  { label: 'Bright Orange', color: '#FFA500' },
-  { label: 'Starlight', color: '#F5F5DC' },
-];
+// Ensure these paths are correct relative to Productdetailscreen.jsx
+import Header from '../Component/Header'; // Your Header component
+import Productcarousel from '../Component/Productcarousel'; // Your Productcarousel component
+// Removed: import GradientButton from '../Component/Gradientbutton'; // <<< REMOVED GradientButton import
+// Removed: import { CartContext } from './Context/CartContext'; // <<< REMOVED CartContext import
 
 const Productdetailscreen = () => {
-  const item = useRoute().params.item;
-  const [selectedColor, setSelectedColor] = useState(null);
-  const [activeTab, setActiveTab] = useState('Details');
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { addToCart } = useCart(); // <-- Use useCart
+  const item = route.params?.item; // This is where your product data will come from
 
-  // for cartcontext 
-  const { addToCart } = useContext(CartContext);
+  // Removed useState (selectedColor)
+  // Removed useContext (CartContext)
+  // Removed handleAddToCart function
 
-  const handleAddToCart = () => {
-    if (!selectedColor) {
-      Alert.alert('Please select a color!');
-      return;
+  useEffect(() => {
+    console.log("Productdetailscreen (Plain TouchableOpacity) mounted.");
+    console.log("Item data received:", item);
+
+    if (!item) {
+      console.warn("Productdetailscreen: 'item' is UNDEFINED or NULL. Cannot display details.");
+    } else {
+      console.log("Item name:", item.name);
+      console.log("Item brandname:", item.brandname);
+      console.log("Item price:", item.price);
+      console.log("Item description value:", item.description);
+      console.log("Item review:", item.review);
     }
-  
-    const productWithColor = {
-      ...item,
-      selectedColor,
-    };
-  
-    addToCart(productWithColor);
-  
-    // Delay the alert slightly to ensure activity is attached
-    setTimeout(() => {
-      Alert.alert('Item added to cart!');
-    }, 100); // 100ms delay is usually safe
+  }, [item, route.params]);
+
+
+  // Simple test function for the button's onPress
+  const handleAddToCart = () => {
+    addToCart(item);
+    // Optionally navigate to cart:
+    // navigation.navigate('Cart');
   };
-  
 
 
+  // Render an error message if product data is not available
+  if (!item) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          Product data not available for this test.
+        </Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.goBackButton}>
+            <Text style={styles.goBackText}>Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // Main UI rendering with only Header, Productcarousel, specific item details, and a plain button
   return (
     <View style={styles.container}>
-      {/* ScrollView with padding bottom to avoid overlap with fixed button */}
-      <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
-        {/* header section */}
+      <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
+
+        {/* Header Component */}
         <Header />
 
-        {/* product carousel */}
-        <Productcarousel images={item.images} />
-
-        {/* product title and information */}
-        <View style={styles.titlecont}>
-          <View style={styles.titlewrapper}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.brandname}>{item.brandname}</Text>
+        {/* Product Carousel Component */}
+        {item.images && item.images.length > 0 ? (
+          <Productcarousel images={item.images} />
+        ) : (
+          <View style={styles.noImageContainer}>
+            <Text style={styles.noImageText}>No images available</Text>
+            <Text style={styles.tempText}>Product Name: {item.name || 'N/A'}</Text>
           </View>
+        )}
 
-          <View style={styles.ratingBox}>
-            <AntDesign name="star" size={18} color="#f1c40f" />
-            <Text style={styles.ratingtext}>4.5</Text>
-          </View>
+        {/* Displaying Name, Brand, Price, Description, Review */}
+        <View style={styles.infoDisplayArea}>
+          <Text style={styles.label}>Product Name:</Text>
+          <Text style={styles.value}>{item.name || 'N/A'}</Text>
+
+          <Text style={styles.label}>Brand:</Text>
+          <Text style={styles.value}>{item.brandname || 'N/A'}</Text>
+
+          <Text style={styles.label}>Price:</Text>
+          <Text style={styles.priceValue}>{item.price ? `$${item.price.toFixed(2)}` : '$0.00'}</Text>
+
+          <Text style={styles.label}>Description:</Text>
+          <Text style={styles.descriptionText}>{item.details || 'No description available.'}</Text>
+
+          <Text style={styles.label}>Review:</Text>
+          <Text style={styles.reviewText}>{item.review || 'No review available yet.'}</Text>
         </View>
 
-        {/* colors section */}
-        <View style={styles.colorsheading}>
-          <Text style={styles.colorheadtext}>Colors</Text>
-        </View>
-        <View style={styles.colorswrapper}>
-          {COLORS.map((colorItem, index) => {
-            const isSelected = selectedColor === colorItem.label;
-            return (
-              <TouchableOpacity
-                key={index}
-                style={[styles.colorbtn, isSelected && { borderColor: 'blue' }]}
-                onPress={() => setSelectedColor(colorItem.label)}
-              >
-                <View style={styles.colorbtncontent}>
-                  <View
-                    style={[styles.circle, isSelected && { backgroundColor: colorItem.color }]}
-                  />
-                  <Text
-                    style={[styles.colorbtntext, { color: isSelected ? '#000' : 'gray' }]}
-                  >
-                    {colorItem.label}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        {/* details and review tab bar */}
-        <View style={styles.tabContainer}>
-          <View style={styles.tabBar}>
-            {['Details', 'Reviews'].map((tab) => (
-              <TouchableOpacity
-                key={tab}
-                onPress={() => setActiveTab(tab)}
-                style={styles.tabButton}
-              >
-                <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-                  {tab}
+        {/* Replaced GradientButton with plain TouchableOpacity */}
+        <View style={styles.bottomButtonWrapper}>
+            <TouchableOpacity onPress={handleAddToCart} style={styles.addToCartButton}>
+                <Text style={styles.addToCartButtonText}>
+                    Add to Cart - {item.price ? `$${item.price.toFixed(2)}` : '$0.00'}
                 </Text>
-                {activeTab === tab && <View style={styles.tabUnderline} />}
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          <View style={styles.tabContent}>
-            {activeTab === 'Details' ? (
-              <Text style={styles.tabContentText}>{item.details}</Text>
-            ) : (
-              <Text style={styles.tabContentText}>{item.review}</Text>
-            )}
-          </View>
+            </TouchableOpacity>
         </View>
-      </ScrollView>
 
-      {/* Fixed gradient button container */}
-      <View style={styles.fixedButtonContainer}>
-      <GradientButton price={item.price} onPress={ handleAddToCart} />
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -144,130 +122,114 @@ export default Productdetailscreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding:10
   },
-  body: {
-    padding: 20,
-    paddingBottom: 100, // give enough space for fixed button
+  scrollViewContent: {
+    paddingBottom: 100, // Make space for the button at the bottom
   },
-
-  // Product info
-  titlecont: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  titlewrapper: {
-    flexShrink: 1,
-    paddingRight: 5,
-  },
-  name: {
-    fontFamily: font.black,
-    fontSize: 21,
-  },
-  brandname: {
-    fontFamily: font.regular,
-    fontSize: 18,
-    color: '#666',
-    marginTop: 2,
-  },
-  ratingBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingtext: {
-    fontFamily: font.regular,
-    fontSize: 16,
-    color: '#333',
-    marginLeft: 4,
-    lineHeight: 20,
-    paddingTop: 1,
-  },
-
-  // Color section
-  colorsheading: {
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  colorheadtext: {
-    fontFamily: font.bold,
-    fontSize: 20,
-  },
-  colorswrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  colorbtn: {
-    borderWidth: 2,
-    borderColor: 'gray',
-    borderRadius: 5,
-    padding: 8,
-  },
-  colorbtncontent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  colorbtntext: {
-    fontFamily: font.regular,
-    fontSize: 16,
-    marginLeft: 6,
-  },
-  circle: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 1,
-    borderColor: 'gray',
-    backgroundColor: 'transparent',
-  },
-
-  // Details and reviews tab bar
-  tabContainer: {
-    marginTop: 20,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  tabButton: {
-    alignItems: 'center',
-    paddingVertical: 10,
+  errorContainer: {
     flex: 1,
-  },
-  tabText: {
-    fontFamily: font.regular,
-    fontSize: 16,
-    color: 'gray',
-  },
-  activeTabText: {
-    color: '#000',
-    fontFamily: font.bold,
-  },
-  tabUnderline: {
-    height: 3,
-    backgroundColor: '#000',
-    marginTop: 5,
-    width: '50%',
-  },
-  tabContent: {
-    paddingVertical: 10,
-  },
-  tabContentText: {
-    fontFamily: font.regular,
-    fontSize: 15,
-    color: '#333',
-    lineHeight: 22,
-    paddingBottom: 20,
-  },
-
-  // Fixed button container
-  fixedButtonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffe0e0',
     padding: 20,
-    backgroundColor: '#fff', // white background to overlay content behind
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#cc0000',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  goBackButton: { // Kept if errorContainer uses it
+    marginTop: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#007AFF',
+    borderRadius: 5,
+    alignSelf: 'center',
+  },
+  goBackText: { // Kept if errorContainer uses it
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  noImageContainer: {
+    width: Dimensions.get('window').width,
+    height: 280,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F0F0F0',
+    marginTop: 15,
+  },
+  noImageText: {
+    color: '#888888',
+    fontSize: 16,
+  },
+  tempText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
+  },
+  infoDisplayArea: {
+    padding: 20,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    marginHorizontal: 20,
+    backgroundColor: '#F9F9F9',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: '#666666',
+    marginBottom: 2,
+    fontWeight: 'bold',
+  },
+  value: {
+    fontSize: 18,
+    color: '#000000',
+    marginBottom: 10,
+    fontWeight: '500',
+  },
+  priceValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 10,
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: '#333333',
+    marginBottom: 10,
+    lineHeight: 22,
+  },
+  reviewText: {
+    fontSize: 16,
+    color: '#333333',
+    lineHeight: 22,
+  },
+  bottomButtonWrapper: {
+    marginTop: 30,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    alignSelf: 'center',
+    width: '90%', // Align with the size of the previous GradientButton
+  },
+  // NEW STYLES FOR THE PLAIN ADD TO CART BUTTON
+  addToCartButton: {
+    backgroundColor: '#007AFF', // A standard blue color for the button
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // You can add shadow here if you want it to look like GradientButton
+    // ...Platform.select for shadows
+  },
+  addToCartButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });

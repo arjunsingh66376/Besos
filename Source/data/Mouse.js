@@ -3,7 +3,7 @@ export const mouse = [
       id: 1,
       name: "logitech M185 Wireless Optical Mouse (1000 DPI, Plug & Play, Grey)",
       brandname: "logitech",
-      price: "$499",
+      price: 499,
       image: "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1681399185/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/168392_0_zl73eg.png",
       images: [
         "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1681399193/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/168392_1_ll5xdo.png",
@@ -18,7 +18,7 @@ export const mouse = [
       id: 2,
       name: "HP S500 Wireless Optical Mouse (1000 DPI, Ergonomic Design, Black)",
       brandname: "HP",
-      price: "$999",
+      price: 999,
       image: "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1697625284/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/221542_justjf.png",
       images: [
         "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1697625282/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/221542_1_oqcyoh.png",
@@ -32,7 +32,7 @@ export const mouse = [
       id: 3,
       name: "logitech MX Master 3S Rechargeable Bluetooth Wireless Laser Performance Mouse with Thumb Wheel",
       brandname: "logitech",
-      price: "$8,995.",
+      price: 8995,
       image: "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1681404219/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/258454_0_rmm57f.png",
       images: [
         "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1681404230/Croma%20Assets/Computers%20Peripherals/Computer%20Accessories%20and%20Tablets%20Accessories/Images/258454_1_qefb35.png",

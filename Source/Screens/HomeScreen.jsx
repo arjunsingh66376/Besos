@@ -68,7 +68,7 @@ const HomeScreen = ({ navigation }) => {
   onPress={() => navigation.navigate('Chatbot')}
 >
   <LottieView
-    source={require('../../Source/assets/Lottie/gitto.json')}
+    source={require('../assets/Lottie/gitto.json')}
     autoPlay
     loop
     resizeMode='contain'
@@ -120,6 +120,7 @@ const Styles = StyleSheet.create({
   Container: {
     backgroundColor: "white",
     padding: 20,
+  
   },
 
   headlineContainer: {

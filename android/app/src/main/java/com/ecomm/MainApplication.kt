@@ -26,7 +26,8 @@ class MainApplication : Application(), ReactApplication {
 
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
-        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+        // CORRECTED LINE BELOW:
+        override val isNewArchEnabled: Boolean = false // <--- THIS IS THE CORRECTED LINE
         override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
       }
 
@@ -36,9 +37,9 @@ class MainApplication : Application(), ReactApplication {
   override fun onCreate() {
     super.onCreate()
     SoLoader.init(this, OpenSourceMergedSoMapping)
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+  //  if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) { // Good, this is commented out
       // If you opted-in for the New Architecture, we load the native entry point for this app.
-      load()
-    }
+  //    load() // Good, this is commented out
+  //  }
   }
 }

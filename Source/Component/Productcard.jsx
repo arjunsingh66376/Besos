@@ -9,7 +9,14 @@ const Productcard = ({item,navigation}) => {
   
   return (
     // card container
-    <TouchableOpacity onPress={()=>navigation.navigate('Product',{item})} style={styles.cardcontainer}>
+    <TouchableOpacity onPress={()=>{
+      console.log("Navigating to Productdetailscreen. Item being passed:", item);
+      if (!item) {
+        console.error("Productcard: Attempting to navigate with an UNDEFINED item!");
+      } else {
+        console.log("Item properties:", item.name, item.price, item.images); // Log key properties
+      }
+      navigation.navigate('Product', { item });} } style={styles.cardcontainer}>
         {/* image container */}
      <View style={styles.imagecont}>
         <Image style={styles.img} source={{uri:item.image}}/>
