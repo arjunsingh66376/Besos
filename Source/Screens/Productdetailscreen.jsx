@@ -16,8 +16,8 @@ import { useCart } from '../Screens/Context/CartContext'; // <-- Add this import
 // Ensure these paths are correct relative to Productdetailscreen.jsx
 import Header from '../Component/Header'; // Your Header component
 import Productcarousel from '../Component/Productcarousel'; // Your Productcarousel component
-// Removed: import GradientButton from '../Component/Gradientbutton'; // <<< REMOVED GradientButton import
-// Removed: import { CartContext } from './Context/CartContext'; // <<< REMOVED CartContext import
+ import GradientButton from '../Component/Gradientbutton';
+import Toast from 'react-native-toast-message';
 
 const Productdetailscreen = () => {
   const route = useRoute();
@@ -50,6 +50,14 @@ const Productdetailscreen = () => {
     addToCart(item);
     // Optionally navigate to cart:
     // navigation.navigate('Cart');
+    Toast.show({
+      type: 'success',
+      text1: 'Item added to cart',
+      position: 'top',
+      visibilityTime: 3000,
+      swipeable:true
+    });
+    
   };
 
 
@@ -103,16 +111,15 @@ const Productdetailscreen = () => {
           <Text style={styles.reviewText}>{item.review || 'No review available yet.'}</Text>
         </View>
 
+          </ScrollView>
         {/* Replaced GradientButton with plain TouchableOpacity */}
         <View style={styles.bottomButtonWrapper}>
-            <TouchableOpacity onPress={handleAddToCart} style={styles.addToCartButton}>
-                <Text style={styles.addToCartButtonText}>
-                    Add to Cart - {item.price ? `$${item.price.toFixed(2)}` : '$0.00'}
-                </Text>
-            </TouchableOpacity>
-        </View>
+  <GradientButton
+    text={`Add to Cart - $${item.price ? item.price.toFixed(2) : '0.00'}`}
+    onPress={handleAddToCart}
+  />
+</View>
 
-      </ScrollView>
     </View>
   );
 };
@@ -179,7 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 20,
     backgroundColor: '#F9F9F9',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   label: {
     fontSize: 14,

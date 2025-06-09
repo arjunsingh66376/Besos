@@ -11,9 +11,34 @@ import Cartscreen from './Source/Screens/Cartscreen';
 import { CartProvider } from './Source/Screens/Context/CartContext';
 import AuthScreen from './Source/Screens/Authscreen';
 import ChatbotScreen from './Source/Screens/ChatbotScreen';
+
 const Stack =createNativeStackNavigator();
+import Toast, { BaseToast } from 'react-native-toast-message';
+
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: '#000', backgroundColor: '#000' }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff', // white text
+      }}
+      text2Style={{
+        fontSize: 14,
+        color: '#ccc', // lighter gray if you use text2
+      }}
+      renderLeadingIcon={()=>null}
+    />
+  ),
+  // You can also customize 'error', 'info' here similarly
+};
+
 const App = () => {
   return (
+    <>
     <CartProvider>
 
     <NavigationContainer >
@@ -28,6 +53,8 @@ const App = () => {
         </Stack.Navigator>
     </NavigationContainer>
         </CartProvider>
+        <Toast config={toastConfig}/>
+        </>
   )
 }
 

@@ -6,6 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import GradientButton from '../Component/Gradientbutton';
 import { useNavigation } from '@react-navigation/native';
 import RazorpayCheckout from 'react-native-razorpay';
+import Toast from 'react-native-toast-message';
+
 
 const CartScreen = () => {
   const { cartItems } = useCart();
@@ -23,8 +25,8 @@ const handlePayment = () => {
     description: 'Order Payment',
     image: 'https://your-logo-url.com/logo.png',
     currency: 'INR',
-    key: 'rzp_test_Q1l5veFa2pHJFF', // Use test key for testing
-    amount: total * 100, // Amount is in paise
+    key: 'rzp_test_Q1l5veFa2pHJFF',
+    amount: total * 100,
     name: 'Besos',
     prefill: {
       email: 'user@example.com',
@@ -32,16 +34,40 @@ const handlePayment = () => {
       name: 'Test User'
     },
     theme: { color: '#000' }
-  }
-  RazorpayCheckout.open(options).then((data) => {
-    // handle success
-    alert(`Success: ${data.razorpay_payment_id}`);
-    // Here you can navigate to order success screen
-  }).catch((error) => {
-    // handle failure
-    alert(`Error: ${error.code} | ${error.description}`);
-  });
-}
+  };
+
+  RazorpayCheckout.open(options)
+    .then((data) => {
+      Toast.show({
+        type: 'success',
+        text1: 'Payment Successful',
+        text2: `Payment ID: ${data.razorpay_payment_id}`,
+        position: 'bottom',
+        visibilityTime: 3000,
+      });
+      // Navigate to success screen if needed
+    })
+    .catch((error) => {
+      if (error.code === 'PAYMENT_CANCELLED') {
+        Toast.show({
+          type: 'info',
+          text1: 'Transaction Declined',
+          text2: 'You cancelled the payment.',
+          position: 'bottom',
+          visibilityTime: 3000,
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Payment Failed',
+          text2: error.description || 'Something went wrong. Please try again.',
+          position: 'bottom',
+          visibilityTime: 4000,
+        });
+      }
+    });
+};
+
 
 
   return (
