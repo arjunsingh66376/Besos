@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { font } from '../../assets/fonts/font'
+import { font } from '../../assets/fonts/font.js'
 
 const Productcard = ({item,navigation}) => {
 

@@ -1,6 +1,3 @@
-
-
-
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,10 +7,10 @@ import Productdetailscreen from './Source/Screens/Productdetailscreen';
 import Cartscreen from './Source/Screens/Cartscreen';
 import { CartProvider } from './Source/Screens/Context/CartContext';
 import AuthScreen from './Source/Screens/Authscreen';
-import ChatbotScreen from './Source/Screens/ChatbotScreen';
+import ChatbotScreen from './Source/Screens/Chatbotscreen';
+import Toast, { BaseToast } from 'react-native-toast-message';
 
 const Stack =createNativeStackNavigator();
-import Toast, { BaseToast } from 'react-native-toast-message';
 
 const toastConfig = {
   success: (props) => (

@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { useCart } from '../Screens/Context/CartContext'; // <-- Add this import
+import { useCart } from './Context/CartContext'; // <-- Add this import
 
 // Ensure these paths are correct relative to Productdetailscreen.jsx
 import Header from '../Component/Header'; // Your Header component
 import Productcarousel from '../Component/Productcarousel'; // Your Productcarousel component
- import GradientButton from '../Component/Gradientbutton';
+import GradientButton from '../Component/Gradientbutton';
 import Toast from 'react-native-toast-message';
 
 const Productdetailscreen = () => {

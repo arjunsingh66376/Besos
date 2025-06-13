@@ -108,7 +108,7 @@ const HomeScreen = ({ navigation }) => {
               <View style={Styles.inputwrapper}>
                 <Image
                   style={Styles.searchincon}
-                  source={require('../../Source/assets/icons/icons8-search-50.png')}
+                  source={require('../assets/icons/icons8-search-50.png')}
                 />
                 <TextInput
                   style={Styles.textinput}
